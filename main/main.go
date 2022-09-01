@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"isl"
+	isl "identitystorelister"
 	"log"
 	"os"
 	"github.com/aws/aws-sdk-go-v2/aws"
