@@ -1,10 +1,9 @@
-package isl
+package identitystorelister
 
 import (
 	"context"
 	"log"
 	"strings"
-
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/identitystore"
 	"github.com/aws/aws-sdk-go-v2/service/identitystore/types"
