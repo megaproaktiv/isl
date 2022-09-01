@@ -4,21 +4,14 @@ import (
 	"fmt"
 	isl "identitystorelister"
 	"log"
-	"os"
-	"github.com/aws/aws-sdk-go-v2/aws"
 )
 
 func main(){
 
-	if len(os.Args) < 2 {
-		log.Fatalf("Need identitystoreID as input\n")
+	id, err := isl.GetInstanceId(isl.ClientSSO)
+	if err != nil {
+		log.Fatal("Error, stop")
 	}
-
-	idInput := os.Args[1]
-	if ! isl.Validate(idInput){
-		log.Fatalf("wrong identityStoreId format , d- is a fixed prefix, Length Constraints: Minimum length of 1. Maximum length of 36.")
-	}
-	id := aws.String(idInput)
 
 	users, err := isl.ListUsers(id, isl.Client)
 	if err != nil {

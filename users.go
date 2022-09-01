@@ -7,9 +7,11 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/identitystore"
 	"github.com/aws/aws-sdk-go-v2/service/identitystore/types"
+	"github.com/aws/aws-sdk-go-v2/service/ssoadmin"
 )	
 
 var Client *identitystore.Client
+var ClientSSO *ssoadmin.Client
 
 func init(){
 	cfg, err := config.LoadDefaultConfig(context.TODO())
@@ -17,6 +19,7 @@ func init(){
 		panic("configuration error, " + err.Error())
 	}
 	Client = identitystore.NewFromConfig(cfg)
+	ClientSSO = ssoadmin.NewFromConfig(cfg)
 }
 
 func ListUsers(identitystoreId *string, client *identitystore.Client)( *[]types.User, error){
@@ -96,4 +99,19 @@ func Validate(id string) bool{
 		return false
 	}
 	return true
+}
+
+func GetInstanceId(client *ssoadmin.Client)(*string, error){
+	resp, err := client.ListInstances(
+		context.TODO(), &ssoadmin.ListInstancesInput{},
+	)
+		
+	if err != nil {
+		log.Fatalf("Cant get instanceid %v", err)
+		return nil, err
+	}
+
+	id := resp.Instances[0].IdentityStoreId
+	return id, nil
+	
 }

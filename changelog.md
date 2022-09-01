@@ -6,7 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.2] - 2022-09.01
+## [0.1.3] - 2022-09-01
+### Added
+- Get instanceid from sso-admin
+
+
+
+## [0.1.2] - 2022-09-01
 ### Added
 - List all users
 - List all groups per user

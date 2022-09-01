@@ -13,6 +13,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/identitystore v1.15.0 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.9.14 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sso v1.11.20 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssoadmin v1.15.8
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.13.2 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.16.16 // indirect
 	github.com/aws/smithy-go v1.13.1 // indirect
