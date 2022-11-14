@@ -15,3 +15,15 @@ tasks:
     desc: Check goreleaser config
     cmds:
       - goreleaser check
+
+  build:
+    desc: local builg go
+    cmds:
+      - go build -o dist/isl main/main.go
+
+  install:
+    desc: install on mac
+    deps: [build]
+    cmds:
+      - rm /usr/local/bin/isl
+      - cp ./dist/isl /usr/local/bin/isl
