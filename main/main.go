@@ -4,9 +4,10 @@ import (
 	"fmt"
 	isl "identitystorelister"
 	"log"
+	"github.com/xuri/excelize/v2"
 )
 
-func main(){
+func main() {
 
 	id, err := isl.GetInstanceId(isl.ClientSSO)
 	if err != nil {
@@ -17,34 +18,73 @@ func main(){
 	if err != nil {
 		log.Fatal("Error, stop")
 	}
-	for _, user := range *users {
-		fmt.Printf("\nUser: %v ", *user.UserName)
-		groups, err := isl.ListGroupMembershipsForMember(user.UserId,id, isl.Client)
+
+	f := excelize.NewFile()
+	sheet := "Sheet1"
+	f.SetSheetName(sheet, "User")
+	sheet = "User"
+	f.SetCellValue(sheet, "A1", "User")
+	f.SetCellValue(sheet, "B1", "Groups")
+	err = f.SetColWidth(sheet, "A", "A",32)
+	if err != nil {
+		log.Print("Cant set width")
+	}
+	err = f.SetColWidth(sheet, "B", "B",128)
+	if err != nil {
+		log.Print("Cant set width")
+	}
+	styleWrap, err := f.NewStyle(&excelize.Style{
+        Alignment: &excelize.Alignment{
+            WrapText: true,
+			ShrinkToFit: true,
+        },
+    })
+    if err != nil {
+        panic(err)
+    }
+	// User Loop
+	for i, user := range *users {
+		fmt.Printf(".")
+		value := fmt.Sprintf("%v / %v %v ", *user.UserName, *user.Name.GivenName, *user.Name.FamilyName)
+		row := i + 2
+		coordinates := fmt.Sprintf("A%d", row)
+		f.SetCellValue(sheet, coordinates, value)
+		// Groups for User Loop
+		groups, err := isl.ListGroupMembershipsForMember(user.UserId, id, isl.Client)
 		if err != nil {
 			log.Print("Cant get groups")
 		}
-		if len(*groups) > 0 {
-			fmt.Printf("Groups: ")
-		}
+		allGroups := ""
 		for _, group := range *groups {
 			name, err := isl.GroupName(group.GroupId, id, isl.Client)
 			if err != nil {
 				log.Print("Cant get groupname")
 			}
-			fmt.Printf("%v ", *name)
+			value = fmt.Sprintf("%v ", *name)
+			allGroups += value+"\r\n"
 		}
-		if len(*groups) > 0 {
-			fmt.Printf("\n")
+		if len(allGroups) > 0{
+			coordinates = fmt.Sprintf("B%d", row)
+			f.SetCellValue(sheet, coordinates, allGroups)
+			if err := f.SetCellStyle(sheet, coordinates, coordinates, styleWrap); err != nil {
+				fmt.Println(err)
+			}
 		}
-	}
 
-	groups, err := isl.ListGroups(id, isl.Client)
-	if err != nil {
-		log.Fatal("Error, stop")
 	}
-	for _, group := range *groups {
-		fmt.Printf("User: %v \n", *group.DisplayName)
+	filename := "sso-users.xlsx"
+	if err := f.SaveAs(filename); err != nil {
+		fmt.Println(err)
 	}
+	fmt.Printf("\nExcelfile %v saved\n", filename)
 
+	// groups, err := isl.ListGroups(id, isl.Client)
+	// if err != nil {
+	// 	log.Fatal("Error, stop")
+	// }
+
+	// for _, group := range *groups {
+	// 	fmt.Printf("Group: %v \n", *group.DisplayName)
+	// }
 
 }

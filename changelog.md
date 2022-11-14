@@ -6,10 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2022-11-14
+### Added
+- Output into excel file
+
 ## [0.1.3] - 2022-09-01
 ### Added
 - Get instanceid from sso-admin
-
 
 
 ## [0.1.2] - 2022-09-01

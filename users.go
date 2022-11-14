@@ -34,6 +34,11 @@ func ListUsers(identitystoreId *string, client *identitystore.Client)( *[]types.
 		log.Printf("Error listusers %p", err)
 		return nil, err
 	}
+
+	// userList := make([]types.User,0)
+	// for _, user := range resp.Users {
+	// 	if user.UserType
+	// }
 	
 	return &resp.Users, err
 }
